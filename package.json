@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/camunda/camunda-hugo-theme",
   "setup": {
-    "target": "./../camunda-docs-manual/themes/flowave"
+    "target": "./../flowave-docs-manual/themes/flowave"
   },
   "devDependencies": {
     "bootstrap": "3.4.1",
