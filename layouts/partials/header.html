@@ -60,9 +60,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </a>
     </div><!-- / .navbar-header -->
 
+    {{ $currentPage := . }}
     <ul class="header-menu">
-      {{range $.Site.Params.sections }}
-      <li {{ if eq $.Site.Params.section.id .id }} class="active" {{ end }} ><a href="{{.url}}">{{.name}}</a></li>
+      {{range  .Site.Menus.main }}
+      <li {{ if or ($currentPage.IsMenuCurrent .Menu . ) ($currentPage.HasMenuCurrent .Menu . ) }} class="active" {{ end }} ><a href="{{.URL}}">{{.Name}}</a></li>
       {{ end }}
     </ul><!-- / .header-menu -->
 
@@ -103,7 +104,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="search-underlay"></div>
 
 <nav class="site-menu">
-  {{ partialCached "menu.html" . }}
+  {{ partial "menu.html" . }}
 </nav>
 
 
