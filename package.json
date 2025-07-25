@@ -1,8 +1,8 @@
 {
-  "proivate": true,
-  "name": "camunda-docs-styles",
+  "private": true,
+  "name": "flowave-docs-theme",
   "version": "0.0.1",
-  "description": "Styling for http://docs.camunda.org/.",
+  "description": "Theme for Flowave documentation.",
   "main": "index.js",
   "scripts": {
     "build": "grunt build",
@@ -11,17 +11,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/camunda/camunda-docs-manual.git"
+    "url": "https://github.com/finos/flowave-docs-manual.git"
   },
   "keywords": [
-    "camunda"
+    "flowave"
   ],
-  "author": "Valentin Vago <zeropaper@irata.ch>",
+  "author": "The Flowave Project",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/camunda/camunda-hugo-theme/issues"
+    "url": "https://github.com/finos/flowave-docs-theme/issues"
   },
-  "homepage": "https://github.com/camunda/camunda-hugo-theme",
+  "homepage": "https://github.com/finos/flowave-docs-theme",
   "setup": {
     "target": "./../flowave-docs-manual/themes/flowave"
   },
