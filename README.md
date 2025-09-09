@@ -1,19 +1,19 @@
 [![FINOS - Incubating](https://cdn.jsdelivr.net/gh/finos/contrib-toolbox@master/images/badge-incubating.svg)](https://community.finos.org/docs/governance/Software-Projects/stages/incubating)
 
-# Flowave Docs Theme
+# Fluxnova Docs Theme
 
-This repo contains theme elemets for the https://github.com/finos/flowave-docs-manual repository.
+This repo contains theme elemets for the https://github.com/finos/fluxnova-docs-manual repository.
 
 ## Install
 
-Clone this repository/branch aside of the `flowave-docs-manual`:
+Clone this repository/branch aside of the `fluxnova-docs-manual`:
 
 ```sh
-# from the flowave-docs-manual directory
+# from the fluxnova-docs-manual directory
 cd ..
-git clone git@github.com:flowave/flowave-docs-theme.git
+git clone git@github.com:fluxnova/fluxnova-docs-theme.git
 # go into its directory
-cd flowave-docs-theme
+cd fluxnova-docs-theme
 npm i
 npm run build
 ```
@@ -28,7 +28,7 @@ and then run `npm run build` from this directory.
 
 ## Consuming the theme
 
-1. Edit the `setup.target` value of `package.json` to point to the theme's root directory in your Hugo project (default: `../flowave-docs-manual/themes/flowave`).
+1. Edit the `setup.target` value of `package.json` to point to the theme's root directory in your Hugo project (default: `../fluxnova-docs-manual/themes/fluxnova`).
 2. Build and update the theme in the target location by either running:
    1. `grunt build` for building and syncing non-minified assets
    2. Run additionally `grunt optimize` for building and syncing minified assets  
@@ -37,22 +37,22 @@ and then run `npm run build` from this directory.
 
 You can also consume the theme in a project via git subtree:
 
-Adding the latest version of the theme as `flowave`:
+Adding the latest version of the theme as `fluxnova`:
 
 ```bash
-git subtree add -P themes/flowave git@github.com:flowave/flowave-docs-theme.git dist --squash
+git subtree add -P themes/fluxnova git@github.com:fluxnova/fluxnova-docs-theme.git dist --squash
 ```
 
 Updating the theme to the latest version:
 
 ```bash
-git subtree pull -P themes/flowave git@github.com:flowave/flowave-docs-theme.git dist --squash
+git subtree pull -P themes/fluxnova git@github.com:fluxnova/fluxnova-docs-theme.git dist --squash
 ```
 
 ### Theme development with Virtualbox
 
 This would be the command to execute in order to make the local development site
-of `flowave-docs-manual` (see `--baseUrl` option) available in a virtualbox (typically for IE).
+of `fluxnova-docs-manual` (see `--baseUrl` option) available in a virtualbox (typically for IE).
 Livereload should be deactivate (see `--disableLiveReload`) if you want to develop for IE9.
 
 ```sh
@@ -63,11 +63,11 @@ The development site is then available on `http://10.0.2.2:1313/manual/develop/`
 guest OS.
 
 ## Contributing
-For any questions, bugs or feature requests please open an [issue](https://github.com/finos/flowave-docs-theme/issues)
+For any questions, bugs or feature requests please open an [issue](https://github.com/finos/fluxnova-docs-theme/issues)
 For anything else please send an email to help@finos.org.
 
 To submit a contribution:
-1. Fork it (<https://github.com/finos/flowave-docs-theme/fork>)
+1. Fork it (<https://github.com/finos/fluxnova-docs-theme/fork>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Read our [contribution guidelines](.github/CONTRIBUTING.md) and [Community Code of Conduct](https://www.finos.org/code-of-conduct)
 4. Commit your changes (`git commit -am 'Add some fooBar'`)
