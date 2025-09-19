@@ -129,7 +129,7 @@ module.exports = function (grunt) {
       dist: {
         options: {
           directory: '.tmp',
-          repository: 'git@github.com:finos/flowave-docs-theme.git',
+          repository: 'git@github.com:finos/fluxnova-docs-theme.git',
 
         }
       }
