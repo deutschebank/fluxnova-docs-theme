@@ -9,8 +9,17 @@
         <!-- First try as relative path -->
         {{- $url = (print .Page.Site.BaseURL .Page.File.Dir $file) -}}
     {{ else }}
-        <!-- Then as project-relative path-->
-        {{- $url = (print .Page.Site.BaseURL $file) -}}
+        {{ if $.Site.Params.openApiBaseURL }}
+            <!-- Then as project parameter on openAPI base URL-->
+            {{- $url = $.Site.Params.openApiBaseURL -}}
+            {{ if (strings.Contains $url "%s") }}
+              {{- $url = (printf $url $.Site.Params.version) -}}
+            {{ end }}
+            {{- $url = (urls.JoinPath $url $file) -}}
+        {{ else }}
+            <!-- Then as project-relative path-->
+            {{- $url = (print .Page.Site.BaseURL $file) -}}
+        {{- end }}
     {{- end }}
 {{- end -}}
 
