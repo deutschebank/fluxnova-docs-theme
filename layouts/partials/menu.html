@@ -48,10 +48,8 @@
 
   <div class="content">
     <label for="version-select">Version:</label>
-    <select id="version-select" data-basepath="/{{ $.Site.Params.section.id }}" base-url="{{ $.Site.BaseURL }}">
-      {{range $.Site.Params.section.versions }}
-        <option {{if eq $.Site.Params.section.version . }} selected {{end}}>{{.}}</option>
-      {{ end }}
+    <select id="version-select" base-url="{{ $.Site.BaseURL }}">
+      <option>Loading versions...</option>
     </select>
   </div>
 </div>
