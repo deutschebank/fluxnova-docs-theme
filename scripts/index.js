@@ -342,51 +342,45 @@ metaHeader.addEventListener('click', toggleMenuMeta);
 /**
  * Fetches the list of available documentation versions and populates a dropdown menu.
  **/
-async function populateVersionSelector() {
+function populateVersionSelector() {
   const versionsJsonPath = '/manual/versions.json';
   const versionSelector = document.getElementById('version-select');
 
-  try {
-      const response = await fetch(versionsJsonPath);
+  fetch(versionsJsonPath)
+    .then(function(response) {
       if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
-      const availableVersions = await response.json();
-
+      return response.json();
+    })
+    .then(function(availableVersions) {
       // This variable now holds the array, e.g., ["1.5", "1.4", "1.3"]
       console.log('Successfully loaded versions:', availableVersions);
-      
+
       // Get the current version from the URL path for comparison
       // e.g., if the URL is "https://.../manual/1.4/...", this gets "1.4"
-      const currentVersion = window.location.pathname.match(/manual\/([^/]+)/)?.[1];
-      
+      const currentVersion = window.location.pathname.match(/manual\/([^/]+)/)[1];
+
       // Create and append an <option> for each available version.
-      versionSelector.innerHTML = ''; 
-      availableVersions.forEach(version => {
-          const option = document.createElement('option');
-          option.value = version;
-          option.textContent = version;
-
-          // If the version matches the one in the current URL, mark it as selected.
-          if (version === currentVersion) {
-              option.selected = true;
-          }
-
-          versionSelector.appendChild(option);
+      versionSelector.innerHTML = '';
+      availableVersions.forEach(function(version) {
+        const option = document.createElement('option');
+        option.value = version;
+        option.textContent = version;
+        if (version === currentVersion) {
+          option.selected = true;
+        }
+        versionSelector.appendChild(option);
       });
-
-      // Add an event listener to navigate when a new version is selected.
-      versionSelector.addEventListener('change', (event) => {
-          const selectedVersion = event.target.value;
-          // Redirect the user to the index page of the selected version.
-          window.location.href = `/manual/${selectedVersion}/`;
+      versionSelector.addEventListener('change', function(event) {
+        const selectedVersion = event.target.value;
+        window.location.href = `/manual/${selectedVersion}/`;
       });
-
-  } catch (error) {
+    })
+    .catch(function(error) {
       console.error('Failed to load or process versions.json:', error);
       versionSelector.innerHTML = '<option>Error loading versions</option>';
-  }
+    });
 }
 document.addEventListener('DOMContentLoaded', populateVersionSelector);
 
@@ -446,7 +440,7 @@ docLoaded(addAnchors);
  * No clue...                                                       *
 \********************************************************************/
 
-var BPMNViewer = require('bpmn-js');
+var BPMNViewer = require('bpmn-js/lib/Viewer');
 
 function fitBpmnViewport(el, viewer) {
   var vb = viewer.get('canvas').viewbox();
@@ -620,4 +614,3 @@ function searchEvent(evt) {
 
 searchField.addEventListener('change', searchEvent);
 searchField.value = '';
-
