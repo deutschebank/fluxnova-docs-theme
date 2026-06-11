@@ -374,7 +374,7 @@ function populateVersionSelector() {
       });
       versionSelector.addEventListener('change', function(event) {
         const selectedVersion = event.target.value;
-        window.location.href = `/manual/${selectedVersion}/`;
+        window.location.href = window.location.href.replace(/\/manual\/[^/]+\//,`/manual/${selectedVersion}/`);
       });
     })
     .catch(function(error) {
