@@ -311,9 +311,6 @@ docLoaded(attachLightbox);
 
 
 
-
-
-
 /********************************************************************\
  * Menu meta nav                                                    *
 \********************************************************************/
@@ -342,21 +339,50 @@ if (versionLink) {
 }
 metaHeader.addEventListener('click', toggleMenuMeta);
 
-var versionSelect = query('.site-menu .meta select');
-if (versionSelect) {
-  versionSelect.addEventListener('change', function () {
+/**
+ * Fetches the list of available documentation versions and populates a dropdown menu.
+ **/
+function populateVersionSelector() {
+  const versionsJsonPath = location.pathname.replace(/\/manual\/[^/]+\/.*/,'/manual/versions.json');
+  const versionSelector = document.getElementById('version-select');
 
-    var dest = attr(versionSelect, 'data-basepath') + '/' + versionSelect.value;
+  fetch(versionsJsonPath)
+    .then(function(response) {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(function(availableVersions) {
+      // This variable now holds the array, e.g., ["1.5", "1.4", "1.3"]
+      console.log('Successfully loaded versions:', availableVersions);
 
-    var basePath = attr(versionSelect, 'base-url');
-    var result = location.href.split(basePath)[1];
-    if (result) {
-      dest = dest + '/' + result;
-    }
+      // Get the current version from the URL path for comparison
+      // e.g., if the URL is "https://.../manual/1.4/...", this gets "1.4"
+      const currentVersion = window.location.pathname.match(/manual\/([^/]+)/)[1];
 
-    location.pathname = dest;
-  });
+      // Create and append an <option> for each available version.
+      versionSelector.innerHTML = '';
+      availableVersions.forEach(function(version) {
+        const option = document.createElement('option');
+        option.value = version;
+        option.textContent = version;
+        if (version === currentVersion) {
+          option.selected = true;
+        }
+        versionSelector.appendChild(option);
+      });
+      versionSelector.addEventListener('change', function(event) {
+        const selectedVersion = event.target.value;
+        window.location.href = window.location.href.replace(/\/manual\/[^/]+\//,`/manual/${selectedVersion}/`);
+      });
+    })
+    .catch(function(error) {
+      console.error('Failed to load or process versions.json:', error);
+      versionSelector.innerHTML = '<option>Error loading versions</option>';
+    });
 }
+document.addEventListener('DOMContentLoaded', populateVersionSelector);
 
 
 /********************************************************************\
@@ -414,7 +440,7 @@ docLoaded(addAnchors);
  * No clue...                                                       *
 \********************************************************************/
 
-var BPMNViewer = require('bpmn-js');
+var BPMNViewer = require('bpmn-js/lib/Viewer');
 
 function fitBpmnViewport(el, viewer) {
   var vb = viewer.get('canvas').viewbox();
@@ -588,34 +614,3 @@ function searchEvent(evt) {
 
 searchField.addEventListener('change', searchEvent);
 searchField.value = '';
-
-
-
-
-
-
-
-/********************************************************************\
- * Downloads                                                        *
-\********************************************************************/
-
-// require('./ee-download');
-
-/********************************************************************\
- * Spying                                                           *
-\********************************************************************/
-
-
-
-// var _gaq = window._gaq || [];
-// var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
-// _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
-// _gaq.push(['_setAccount', 'UA-39060941-1']);
-// _gaq.push(['_setDomainName', 'camunda.org']);
-// _gaq.push(['_trackPageview']);
-
-// (function() {
-//   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-//   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-//   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-// })();
