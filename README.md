@@ -71,7 +71,7 @@ To enable search, provide the following Algolia configuration under `params.algo
 ```yaml
 params:
   algolia:
-    appID: "your-algolia-app-id"
+    appId: "your-algolia-app-id"
     apiKey: "your-algolia-search-only-api-key"
     indexName: "your-index-name"
 ```
@@ -79,7 +79,7 @@ params:
 **TOML:**
 ```toml
 [params.algolia]
-appID = "your-algolia-app-id"
+appId = "your-algolia-app-id"
 apiKey = "your-algolia-search-only-api-key"
 indexName = "your-index-name"
 ```

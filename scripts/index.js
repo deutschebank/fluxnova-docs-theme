@@ -491,15 +491,23 @@ docLoaded(attachDiagrams);
 
 
 /********************************************************************\
- * Search                                                           *
+* Algolia DocSearch Integration                                                 *
 \********************************************************************/
 
-var docsearch = require('@docsearch/js');
+// Require the Algolia DocSearch package.
+// Falls back to the root module object if '.default' is undefined (CommonJS/ESM bridge)
+var docsearchModule = require('@docsearch/js');
+var docsearch = docsearchModule.default || docsearchModule;
+
 
 docLoaded(function () {
+  // Pull credentials exposed by the Hugo layout template engine
   var config = window.DOCSEARCH_CONFIG;
+
+  // Graceful exit: Do not initialize UI or throw errors if credentials are not provided
   if (!config) return;
 
+  // Render the modal-driven search field into our targeting anchor slot
   docsearch({
     container: '#docsearch',
     appId: config.appId,
