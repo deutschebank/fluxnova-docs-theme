@@ -1,9 +1,30 @@
-/* Remove legacy glyphicon search icon */
-.search-field::after {
-  display: none;
-}
+.search-field::after { display: none; }
 
-/* kill legacy vertical offset from old input-based search */
 .navbar-container .search-field {
-  padding-top: 0;
+  position: relative;
+  height: @header-computed-height;
+  padding: 0;
+
+  #docsearch, .DocSearch {
+    position: absolute; left: 0; right: 0; top: 50%;
+    transform: translateY(-50%);
+    text-align: right;
+
+    /* Force Algolia's theme engine to scale down to your navbar dimensions */
+    --docsearch-button-height: 26px !important;
+    --docsearch-searchbox-height: 26px !important;
+    --docsearch-key-height: 18px !important;
+    --docsearch-spacing: 8px !important;
+  }
+
+  /* This tiny block ensures the inner elements actually obey the flex rules */
+  .DocSearch-Button {
+    display: inline-flex !important;
+    align-items: center !important;
+    height: var(--docsearch-button-height) !important;
+
+    > svg, img { height: 14px !important; width: 14px !important; }
+    .DocSearch-Button-Placeholder { font-size: 13px !important; }
+    .DocSearch-Button-Key, kbd { display: inline-flex !important; align-items: center; justify-content: center; }
+  }
 }
