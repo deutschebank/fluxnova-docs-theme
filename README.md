@@ -62,6 +62,30 @@ hugo --bind="0.0.0.0" --baseUrl="http://10.0.2.2:1313/manual/develop/" -w --disa
 The development site is then available on `http://10.0.2.2:1313/manual/develop/` in your virtualbox
 guest OS.
 
+## Algolia DocSearch Configuration
+This theme includes support for Algolia DocSearch.
+
+To enable search, provide the following Algolia configuration under `params.algolia` in the consuming Hugo site configuration (`config.yaml` or `config.toml`):
+
+**YAML:**
+```yaml
+params:
+  algolia:
+    appID: "your-algolia-app-id"
+    apiKey: "your-algolia-search-only-api-key"
+    indexName: "your-index-name"
+```
+
+**TOML:**
+```toml
+[params.algolia]
+appID = "your-algolia-app-id"
+apiKey = "your-algolia-search-only-api-key"
+indexName = "your-index-name"
+```
+
+If Algolia configuration is not provided, DocSearch is not initialized and no search UI is displayed. The site will continue to function normally without console errors.
+
 ## Contributing
 For any questions, bugs or feature requests please open an [issue](https://github.com/finos/fluxnova-docs-theme/issues)
 For anything else please send an email to help@finos.org.
