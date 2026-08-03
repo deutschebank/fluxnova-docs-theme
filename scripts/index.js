@@ -491,126 +491,27 @@ docLoaded(attachDiagrams);
 
 
 /********************************************************************\
- * Search                                                           *
+* Algolia DocSearch Integration                                                 *
 \********************************************************************/
 
-var searchResultTmpl = require('lodash.template')(
-  '<li>' +
-    '<h2><a href="<%= link %>"><%= title %></a></h2>' +
-    '<div class="description<% if (pagemap && pagemap.cse_thumbnail) { %> with-thumbnail<% } %>">' +
-      '<% if (pagemap && pagemap.cse_thumbnail) { %>' +
-      '<a class="thumbnail" href="<%= link %>"><img src="<%- pagemap.cse_thumbnail[0].src %>" /></a>' +
-      '<% } %>' +
-      '<p><%= htmlSnippet %></p>' +
-    '</div>' +
-  '</li>'
-);
+// Require the Algolia DocSearch package.
+// Falls back to the root module object if '.default' is undefined (CommonJS/ESM bridge)
+var docsearchModule = require('@docsearch/js');
+var docsearch = docsearchModule.default || docsearchModule;
 
-var gSearchApiKey = 'AIzaSyBr7ZsDDbUbl_pExzErrTlSWXSZP0vpzyM';
-var gSearchCtx = '007121298374582869478:yaec0vxmc7e';
-var bodyClasses = document.body.classList;
-var searchUri = 'https://www.googleapis.com/customsearch/v1?key=' + gSearchApiKey + '&cx=' + gSearchCtx + '&q=';
-var searchField = query('.search-input');
-var searchResults = query('.search-results');
-var searchUnderlay = query('.search-underlay');
-var searchCloseBtn = query('.search-close', searchResults);
-var pageButtons = queryAll('button.page');
 
-function closeSearch(evt) {
-  evt.preventDefault();
-  bodyClasses.remove('search-open');
-  searchField.value = '';
-}
-searchCloseBtn.addEventListener('click', closeSearch);
-searchUnderlay.addEventListener('click', closeSearch);
+docLoaded(function () {
+  // Pull credentials exposed by the Hugo layout template engine
+  var config = window.DOCSEARCH_CONFIG;
 
-pageButtons.forEach(function (btn) {
-  btn.addEventListener('click', function (evt) {
-    evt.preventDefault();
-    var searched = attr(btn, 'data-searched');
-    var startIndex = attr(btn, 'data-start-index');
-    performSearch(searchUri + searched/* + '&startIndex=' + startIndex*/ + '&start=' + startIndex);
+  // Graceful exit: Do not initialize UI or throw errors if credentials are not provided
+  if (!config) return;
+
+  // Render the modal-driven search field into our targeting anchor slot
+  docsearch({
+    container: '#docsearch',
+    appId: config.appId,
+    apiKey: config.apiKey,
+    indexName: config.indexName
   });
 });
-
-
-function performSearch(uri) {
-  pageButtons.forEach(function (el) {
-    attr(el, 'disabled', 'disabled');
-    attr(el, 'data-searched', null);
-    attr(el, 'data-start-index', null);
-  });
-
-  xhr({
-    uri: uri,
-    headers: {
-      'Accept': 'application/json'
-    }
-  }, function (err, resp, body) {
-    var resultsContainer = query('ul', searchResults);
-    var renderedResults = '';
-
-    if(err) {
-      console.error('google custom search', err.message);
-      resultsContainer.innerHTML = '<li class="search-error">' + err.message + '</li>';
-    }
-    else {
-      var results = JSON.parse(body);
-
-      if (results.items && results.items.length) {
-        renderedResults = results.items.map(function (item) {
-          if (!item.pagemap) {
-            return '';
-          }
-          return searchResultTmpl(item);
-        }).join('');
-
-        var previous = results.queries.previousPage ? results.queries.previousPage[0] : false;
-        if (previous) {
-          attr(pageButtons[0], 'disabled', null);
-          attr(pageButtons[0], 'data-searched', previous.searchTerms);
-          attr(pageButtons[0], 'data-start-index', previous.startIndex);
-        }
-
-        var next = results.queries.nextPage ? results.queries.nextPage[0] : false;
-        if (next) {
-          attr(pageButtons[1], 'disabled', null);
-          attr(pageButtons[1], 'data-searched', next.searchTerms);
-          attr(pageButtons[1], 'data-start-index', next.startIndex);
-        }
-      }
-      else {
-        renderedResults += '<li class="no-results">no results</li>';
-      }
-    }
-
-    resultsContainer.innerHTML = renderedResults;
-
-    bodyClasses.add('search-open');
-
-    query('li:first-of-type', resultsContainer).scrollIntoView();
-  });
-}
-
-function searchEvent(evt) {
-  evt.preventDefault();
-
-  var search = searchField.value.trim();
-
-  // IE9 users are redirected
-  if (document.all && !window.atob) {
-    window.open('https://www.google.com/search?q=site%3Ahttp%3A%2F%2Fdocs.camunda.org%20' + search, 'GoogleSearch');
-    return;
-  }
-
-  if(!search.length) {
-    bodyClasses.remove('search-open');
-    return;
-  }
-  bodyClasses.add('search-open');
-
-  performSearch(searchUri + search);
-}
-
-searchField.addEventListener('change', searchEvent);
-searchField.value = '';

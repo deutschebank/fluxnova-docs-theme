@@ -1,157 +1,59 @@
-.search-field {
-  position: relative;
+/********************************************************************\
+ * Consolidated Algolia DocSearch Infrastructure Styles             *
+\********************************************************************/
 
-  &:after {
-    color: @gray-light;
-    display: inline-block;
-    font-family: 'Glyphicons Halflings';
-    font-style: normal;
-    font-weight: normal;
-    line-height: 1;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    position: absolute;
-    content: '\e003';
-    top: 15px;
-    right: 21px;
-  }
-
-  input {
-    width: 100%;
-    outline: none;
-    color: @gray-darker;
-    border: 1px solid @gray-lighter;//@brand-primary;
-    border-radius: 24px;
-    padding: 0 24px 0 12px;
-    height: 24px;
-    line-height: 16px;
-  }
+/* Remove legacy Bootstrap glyphicon magnifying glass icon wrapper */
+.search-field::after { 
+  display: none; 
 }
 
+/* Structural navigation layout slot for the search element */
+.navbar-container .search-field {
+  position: relative;
+  height: @header-computed-height; // Pin layout tracking inside header boundaries
+  padding: 0;
 
+  /* Target Algolia's root DOM insertion node */
+  #docsearch, .DocSearch {
+    position: absolute; 
+    left: 0; 
+    right: 0; 
+    top: 50%;
+    transform: translateY(-50%); // Flawless vertical centering alignment
+    width: 100%; // Scales across layout to minimize horizontal whitespace gaps
 
-
-
-
-
-
-
-.search-results {
-  opacity: 0;
-  position: fixed;
-  /* Prevents the search results from being hidden at any screen size, because our top nav height varies a lot. */
-  top: 123px;
-  left: 5%;
-  right: 5%;
-  overflow: hidden;
-  z-index: 0;
-
-  transform: translateY(0 - (@grid-gutter-width * 2));
-  transition: transform 0.218s ease, opacity 0.218s ease;
-
-  background-color: @body-bg;
-  border: 1px solid @gray-light;
-  border-top: none;
-  box-shadow: 0 0 3px 0 @gray;
-
-  &:before {
-    content: '';
-    height: 5px;
-    top: -5px;
-    display: block;
-    position: absolute;
-    left: -10px;
-    width: ~"calc(100% + 20px)";
-    box-shadow: 0 0 3px 0 @gray;
+    /* Algolia v3 Native Engine Variables Overrides.
+       Configures component tokens directly without deep nested selector hacking.
+    */
+    --docsearch-button-height: 26px !important; 
+    --docsearch-searchbox-height: 26px !important;
+    --docsearch-key-height: 18px !important;
+    --docsearch-spacing: 8px !important;
   }
 
-  ul {
-    padding: 0 (@grid-gutter-width * 0.5) (@grid-gutter-width * 0.5) (@grid-gutter-width * 0.5);
-    margin: 0 auto;
-    max-height: 0;
-    overflow: auto;
-    transition: max-height 0.218s ease;
-    list-style: none;
-  }
+  /* Micro-adjust button elements to stretch correctly and maintain perfect tracking */
+  .DocSearch-Button {
+    display: inline-flex !important;
+    align-items: center !important;         // Vertically aligns icon, placeholder, and keys
+    justify-content: space-between !important; // Pins items to outer bounds to minimize FINOS text gap
+    width: 100% !important;                 // Forces pill container expansion leftward
+    height: var(--docsearch-button-height) !important;
+    margin: 0 !important;
+    
+    // Scale tracking constraints for individual internal assets
+    > svg, img { height: 14px !important; width: 14px !important; }
+    .DocSearch-Button-Placeholder { font-size: 13px !important; }
+    
+    // Aligns shortcut key badge containers to sit flush inside the border limits
+    .DocSearch-Button-Keys {
+      display: inline-flex !important;
+      align-items: center !important;
 
-  li {
-    overflow: hidden;
-    margin: 0 auto;
-    max-width: 650px;
-  }
-
-  h2 {
-    font-size: 20px;
-    > a {
-      text-decoration: none;
-    }
-  }
-
-  .thumbnail {
-    float: left;
-    margin-right: @grid-gutter-width * 0.5;
-    max-width: 25%;
-  }
-
-  .with-thumbnail {
-    .description {
-    }
-  }
-
-  .no-results {
-    margin-top: 20px;
-    font-size: 20px;
-    text-align: center;
-  }
-
-  > footer {
-    position: relative;
-    width: 100%;
-    text-align: center;
-    overflow: hidden;
-    button {
-      float: left;
-      display: block;
-      border-width: 1px 0 0 0;
-      width: 33%;
-      &.search-close {
-        width: 34%;
-        border-left-width: 1px;
-        border-right-width: 1px;
+      .DocSearch-Button-Key, kbd { 
+        display: inline-flex !important; 
+        align-items: center !important; 
+        justify-content: center !important; 
       }
     }
-  }
-}
-
-.search-underlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 0;
-  z-index: 6;
-  background-color: fade(@gray-light, 95%);
-}
-
-
-body.search-open {
-  .search-results {
-    opacity: 1;
-    transform: translateY(0);
-    z-index: 7;
-    ul {
-      max-height: 500px;
-    }
-  }
-
-  .search-underlay {
-    height: 100%;
-  }
-}
-
-@media (max-width: @site-menu-breakpoint) {
-  .search-results {
-    left: 5px;
-    right: 5px;
   }
 }
